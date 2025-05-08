@@ -1,17 +1,20 @@
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List, Dict
 from datetime import datetime
 
-class DocumentRequest(BaseModel):
-    document_name: str
+
 
 class RequestCreate(BaseModel):
     description: str = ""
-    documents: List[DocumentRequest]
-    solicitant_user_id: str
-    solicited_user_id: str
+    documents: List[str]
+    solicitant_user_id: int
+    solicited_user_id: int
 
 class RequestInDB(RequestCreate):
-    id: str
+    request_id: str
     date: datetime
     status: str  # pendiente, aprobada, rechazada
+
+class RequestApprovalInput(BaseModel):
+    urls: Dict[str, str]  # {"documento1.pdf": "https://link1", "documento2.pdf": "https://link2"}
+

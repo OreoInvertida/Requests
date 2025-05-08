@@ -9,17 +9,17 @@ async def create_request(request_data: RequestCreate):
     collection = mongo.db["requests"]
     
     new_request = {
-        "id": str(uuid4()),
+        "request_id": str(uuid4()),
         "date": datetime.utcnow(),
         "status": "pendiente",
         "description": request_data.description,
-        "documents": [doc.dict() for doc in request_data.documents],
+        "documents": request_data.documents,
         "solicitant_user_id": request_data.solicitant_user_id,
         "solicited_user_id": request_data.solicited_user_id
     }
 
     await collection.insert_one(new_request)
-    return {"message": "Solicitud creada exitosamente", "request_id": new_request["id"]}
+    return {"message": "Solicitud creada exitosamente", "request_id": new_request["request_id"]}
 
 
 
@@ -28,6 +28,7 @@ async def get_requests_for_user(user_id: str):
         raise Exception("MongoDB no está conectado.")
 
     collection = mongo.db["requests"]
+    user_id = int(user_id)
 
     # Consultar solicitudes como solicitante
     as_requester = await collection.find({"solicitant_user_id": user_id}).to_list(length=None)
@@ -42,7 +43,7 @@ async def get_requests_for_user(user_id: str):
             "date": r["date"],
             "status": r["status"],
             "description": r.get("description", ""),
-            "files": r["files"],
+            "documents": r["documents"],
             "solicitant_user_id": r["solicitant_user_id"],
             "solicited_user_id": r["solicited_user_id"],
         }
@@ -51,3 +52,28 @@ async def get_requests_for_user(user_id: str):
         "as_requester": [serialize_request(r) for r in as_requester],
         "as_requested": [serialize_request(r) for r in as_requested]
     }
+
+
+async def approve_request(request_id: str):
+    if mongo.db is None:
+        raise Exception("MongoDB no está conectado.")
+
+    collection = mongo.db["requests"]
+    doc = await collection.find_one({"request_id": request_id})
+    print(doc)
+
+
+    result = await collection.update_one(
+        {"request_id": request_id},
+        {
+            "$set": {
+                "status": "aprobada",
+                "fulfilled_at": datetime.utcnow(),
+            }
+        }
+    )
+
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Solicitud no encontrada.")
+
+    return {"message": "Solicitud actualizada exitosamente."}
