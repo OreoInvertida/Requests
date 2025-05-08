@@ -9,12 +9,11 @@ class RequestCreate(BaseModel):
     documents: List[str]
     solicitant_user_id: int
     solicited_user_id: int
+    request_type: str
+    ext_data: Dict[str,str]
 
 class RequestInDB(RequestCreate):
     request_id: str
     date: datetime
     status: str  # pendiente, aprobada, rechazada
-
-class RequestApprovalInput(BaseModel):
-    urls: Dict[str, str]  # {"documento1.pdf": "https://link1", "documento2.pdf": "https://link2"}
 
