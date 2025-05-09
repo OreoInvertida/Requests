@@ -16,8 +16,8 @@ async def create_request(request_data: RequestCreate, token: str):
         "status": "pendiente",
         "description": request_data.description,
         "documents": request_data.documents,
-        "solicitant_user_id": request_data.solicitant_user_id,
-        "solicited_user_id": request_data.solicited_user_id,
+        "solicitant_user_email": request_data.solicitant_user_email,
+        "solicited_user_email": request_data.solicited_user_email,
         "ext_data": request_data.ext_data,
         "type": request_data.request_type
     }

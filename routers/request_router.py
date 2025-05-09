@@ -8,7 +8,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 router = APIRouter()
 security = HTTPBearer()
 
-@router.post("/create")
+@router.post("/create-req")
 async def create_document_request(request: RequestCreate, token: dict = Depends(verify_token)):
     return await create_request(request, token)
 

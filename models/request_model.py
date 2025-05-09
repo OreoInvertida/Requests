@@ -7,8 +7,8 @@ from datetime import datetime
 class RequestCreate(BaseModel):
     description: str = ""
     documents: List[str]
-    solicitant_user_id: int
-    solicited_user_id: int
+    solicitant_user_email: int
+    solicited_user_email: int
     request_type: str
     ext_data: Dict[str,str]
 

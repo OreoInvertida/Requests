@@ -14,7 +14,7 @@ async def notif_created_req(request_data: RequestCreate, token: str):
             if request_data.request_type == "internal":
                 
                 solicited_user = await client.get(
-                    f"{USERS_SERVICE_URL}/get/{request_data.solicitant_user_id}",
+                    f"{USERS_SERVICE_URL}/get-em/{request_data.solicitant_user_id}",
                     headers={"Authorization": f"Bearer {token}"}
                 )
                 if solicited_user.status_code != 200:
@@ -22,7 +22,7 @@ async def notif_created_req(request_data: RequestCreate, token: str):
                     return
                 
                 solicitant_user = await client.get(
-                    f"{USERS_SERVICE_URL}/get/{request_data.solicited_user_id}",
+                    f"{USERS_SERVICE_URL}/get-em/{request_data.solicited_user_id}",
                     headers={"Authorization": f"Bearer {token}"}
                 )
                 if solicitant_user.status_code != 200:
@@ -54,7 +54,7 @@ async def notif_created_req(request_data: RequestCreate, token: str):
             elif request_data.request_type == "external":
                 
                 solicitant_user = await client.get(
-                    f"{USERS_SERVICE_URL}/get/{request_data.solicitant_user_id}",
+                    f"{USERS_SERVICE_URL}/get-em/{request_data.solicitant_user_id}",
                     headers={"Authorization": f"Bearer {token}"}
                 )
                 if solicitant_user.status_code != 200:
@@ -89,7 +89,7 @@ async def notif_approved_req(token: str, doc, urls):
             if  doc["type"] == "internal":
 
                 solicited_user = await client.get(
-                    f"{USERS_SERVICE_URL}/get/{doc['solicitated_user_id']}",
+                    f"{USERS_SERVICE_URL}/get-em/{doc['solicitated_user_id']}",
                     headers={"Authorization": f"Bearer {token}"}
                 )
                 if solicited_user.status_code != 200:
@@ -97,7 +97,7 @@ async def notif_approved_req(token: str, doc, urls):
                     return
                 
                 solicitant_user = await client.get(
-                    f"{USERS_SERVICE_URL}/get/{doc['solicitant_user_id']}",
+                    f"{USERS_SERVICE_URL}/get-em/{doc['solicitant_user_id']}",
                     headers={"Authorization": f"Bearer {token}"}
                 )
                 if solicitant_user.status_code != 200:
@@ -128,7 +128,7 @@ async def notif_approved_req(token: str, doc, urls):
             elif doc["type"] == "external":
 
                 solicitant_user = await client.get(
-                    f"{USERS_SERVICE_URL}/get/{doc['solicitant_user_id']}",
+                    f"{USERS_SERVICE_URL}/get-em/{doc['solicitant_user_id']}",
                     headers={"Authorization": f"Bearer {token}"}
                 )
                 if solicitant_user.status_code != 200:
