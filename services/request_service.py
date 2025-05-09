@@ -1,5 +1,5 @@
 from database.mongodb import mongo
-from models.request_model import RequestCreate
+from models.request_model import RequestCreate, ApprovalReq
 from datetime import datetime
 from fastapi import HTTPException
 from uuid import uuid4
@@ -60,7 +60,7 @@ async def get_requests_for_user(user_id: str):
     }
 
 
-async def approve_request(request_id: str, token: str):
+async def approve_request(request_id: str, request: ApprovalReq, token: str):
     if mongo.db is None:
         raise Exception("MongoDB no está conectado.")
 
@@ -79,7 +79,7 @@ async def approve_request(request_id: str, token: str):
     )
 
 
-    urls = ["doc1","doc2"] ###### GET BUCKET LINKS HERE
+    urls = ["doc1","doc2"] ###### GET BUCKET LINKS AND STORE HERE, USER request.urls for document links
 
     await notif_approved_req( token=token, doc=doc, urls=urls)
 

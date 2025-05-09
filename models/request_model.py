@@ -17,3 +17,6 @@ class RequestInDB(RequestCreate):
     date: datetime
     status: str  # pendiente, aprobada, rechazada
 
+
+class ApprovalReq(BaseModel):
+    documents_path: list[str]
